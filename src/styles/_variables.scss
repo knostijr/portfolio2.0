@@ -1,0 +1,35 @@
+// Colors
+$color-bg:            #0b1410;
+$color-bg-card:       #112018;
+$color-bg-card-alt:   #0f1c14;
+$color-accent:        #3DCFB6;
+$color-accent-dark:   #2ba896;
+$color-accent-muted:  rgba(61, 207, 182, 0.1);
+$color-text:          #e8f0eb;
+$color-text-muted:    #7a9e8a;
+$color-border:        rgba(61, 214, 140, 0.15);
+$color-white:         #ffffff;
+
+// Typography
+$font-mono: 'Fira Code', monospace;
+$font-sans: 'Karla', sans-serif;
+
+// Spacing
+$section-padding: 100px 0;
+$container-max:   1200px;
+$container-pad:   24px;
+
+// Border radius
+$radius-sm:  6px;
+$radius-md:  12px;
+$radius-lg:  20px;
+
+// Transitions
+$transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+// Breakpoints
+$bp-mobile:  480px;
+$bp-tablet:  768px;
+$bp-desktop: 1024px;
+$bp-wide:    1280px;
