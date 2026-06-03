@@ -5,6 +5,7 @@ import { Testimonials } from './ts/testimonials';
 import { ContactForm } from './ts/contact';
 import { ScrollReveal } from './ts/scroll-reveal';
 import { Language } from './ts/language';
+import { Projects } from './ts/projects';
 
 document.addEventListener('DOMContentLoaded', () => {
   new Navigation();
@@ -13,4 +14,5 @@ document.addEventListener('DOMContentLoaded', () => {
   new ContactForm();
   new ScrollReveal();
   new Language();
+  new Projects();
 });
