@@ -1,0 +1,57 @@
+@mixin container {
+  max-width: $container-max;
+  margin: 0 auto;
+  padding: 0 $container-pad;
+}
+
+@mixin flex($dir: row, $justify: flex-start, $align: center, $gap: 0) {
+  display: flex;
+  flex-direction: $dir;
+  justify-content: $justify;
+  align-items: $align;
+  gap: $gap;
+}
+
+@mixin grid($cols, $gap: 24px) {
+  display: grid;
+  grid-template-columns: $cols;
+  gap: $gap;
+}
+
+@mixin respond-to($bp) {
+  @if $bp == mobile {
+    @media (max-width: $bp-mobile) { @content; }
+  } @else if $bp == tablet {
+    @media (max-width: $bp-tablet) { @content; }
+  } @else if $bp == desktop {
+    @media (max-width: $bp-desktop) { @content; }
+  } @else if $bp == wide {
+    @media (max-width: $bp-wide) { @content; }
+  }
+}
+
+@mixin section-label {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $color-accent;
+  margin-bottom: 12px;
+  display: block;
+}
+
+@mixin card-base {
+  background: $color-bg-card;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 32px;
+}
+
+@mixin hover-lift {
+  transition: transform $transition-base, box-shadow $transition-base;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(61, 214, 140, 0.1);
+  }
+}
