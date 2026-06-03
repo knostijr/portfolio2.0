@@ -1,0 +1,1559 @@
+@import 'variables';
+@import 'mixins';
+@import 'reset';
+
+// ─── Base ──────────────────────────────────────────────────────────────────────
+html, body {
+  overflow-x: hidden;
+}
+
+@include respond-to(mobile) {
+  .hero, .about, .skills, .projects, .testimonials, .contact {
+    &.hero { padding-top: 80px; }
+  }
+
+  section:not(.hero) {
+    padding: 64px 0;
+  }
+}
+
+// ─── Navigation ────────────────────────────────────────────────────────────────
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px 0;
+  transition: background $transition-base, backdrop-filter $transition-base;
+
+  &.scrolled {
+    background: rgba($color-bg, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid $color-border;
+    padding: 14px 0;
+  }
+
+  &__inner {
+    @include container;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    // Kein space-between mehr — lang + links bleiben links, logo rechts
+  }
+
+  // Left: EN/DE toggle
+  &__lang {
+    display: flex;
+    align-items: center;
+    background: rgba($color-accent, 0.08);
+    border: 1px solid $color-border;
+    border-radius: 20px;
+    padding: 3px;
+    flex-shrink: 0;
+  }
+
+  &__lang-btn {
+    font-family: $font-mono;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: $color-text-muted;
+    padding: 4px 12px;
+    border-radius: 16px;
+    transition: $transition-base;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+
+    &.active {
+      background: $color-accent;
+      color: $color-bg;
+    }
+
+    &:hover:not(.active) {
+      color: $color-accent;
+    }
+  }
+
+  // Links: direkt nach EN/DE gruppiert
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+
+    @include respond-to(tablet) {
+      display: none;
+    }
+  }
+
+  &__link {
+    font-family: $font-sans;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: $color-text;
+    transition: color $transition-base;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: $color-accent;
+      transition: width $transition-base;
+    }
+
+    &:hover {
+      color: $color-accent;
+      &::after { width: 100%; }
+    }
+  }
+
+  // Right: logo — margin-left: auto drückt es immer nach rechts,
+  // egal ob die Links sichtbar sind (Desktop) oder nicht (Tablet/Mobile)
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    margin-left: auto;
+  }
+
+  &__logo-text {
+    font-family: $font-sans;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: $color-white;
+    line-height: 1.2;
+  }
+
+  &__toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 4px;
+    cursor: pointer;
+
+    @include respond-to(tablet) { display: flex; }
+
+    span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: $color-text;
+      transition: $transition-base;
+    }
+  }
+
+  &__mobile {
+    display: none;
+    flex-direction: column;
+    background: $color-bg-card;
+    border-bottom: 1px solid $color-border;
+
+    &.open { display: flex; }
+
+    a {
+      padding: 16px 24px;
+      font-size: 1rem;
+      color: $color-text-muted;
+      border-bottom: 1px solid $color-border;
+      transition: color $transition-base, background $transition-base;
+
+      &:hover {
+        color: $color-accent;
+        background: $color-accent-muted;
+      }
+    }
+  }
+}
+
+// ─── Hero ───────────────────────────────────────────────────────────────────────
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(61, 207, 182, 0.18) 0%, rgba(61, 207, 182, 0.04) 40%, transparent 70%);
+
+  &__inner {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding: 0 24px;
+  }
+
+  &__label {
+    display: block;
+    font-family: $font-mono;
+    font-size: 1rem;
+    font-weight: 300;
+    color: rgba($color-text, 0.75);
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    font-family: $font-sans;
+    font-size: clamp(3.5rem, 9vw, 7rem);
+    font-weight: 700;
+    line-height: 1.0;
+    color: $color-white;
+    letter-spacing: -0.02em;
+    margin-bottom: 40px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+&__scroll {
+    position: absolute;
+    left: clamp(20px, 4vw, 60px);
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    @include respond-to(tablet) { display: none; }
+  }
+
+  &__scroll-circle {
+    width: 28px;
+    height: 56px;
+    border-radius: 50px;
+    border: 1px solid rgba($color-accent, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-accent;
+    animation: bounce 2s ease-in-out infinite;
+    transition: border-color $transition-base, color $transition-base, background $transition-base;
+    flex-shrink: 0;
+  }
+
+  &__scroll-line {
+    width: 1px;
+    flex: 1;
+    min-height: 300px;
+    padding-left: 10%;
+    background: linear-gradient(to bottom, rgba($color-accent, 0.4), transparent);
+    transition: background $transition-base;
+  }
+  
+  &__sidebar {
+    position: absolute;
+    right: clamp(20px, 4vw, 60px);
+    top: 50%;
+    transform: translateY(-40%);
+    bottom: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include respond-to(tablet) { display: none; }
+  }
+
+  &__email {
+    font-family: $font-mono;
+    font-size: 0.72rem;
+    color: $color-text-muted;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+    transition: color $transition-base;
+
+    &:hover { color: $color-accent; }
+  }
+
+  &__sidebar-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+
+    a {
+      color: $color-text-muted;
+      transition: color $transition-base, transform $transition-base;
+      display: flex;
+
+      &:hover {
+        color: $color-accent;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  &__sidebar-line {
+    width: 1px;
+    flex: 1;
+    background: rgba($color-accent, 0.4);
+  }
+
+  
+  // Diagonal banner at bottom
+  &__banner {
+    position: absolute;
+    bottom: 60px;
+    left: -10%;
+    right: -10%;
+    width: 120%;
+    background: rgba($color-accent, 0.04);
+    border-top: 1px solid rgba($color-accent, 0.25);
+    border-bottom: 1px solid rgba($color-accent, 0.25);
+    padding: 16px 0;
+    overflow: hidden;
+    transform: rotate(-3deg);
+    z-index: 0;
+  }
+
+  &__banner-track {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    white-space: nowrap;
+    animation: bannerScroll 30s linear infinite;
+    font-family: $font-mono;
+    font-size: 1.1rem;
+    color: $color-accent;
+    letter-spacing: 0.04em;
+
+    span { flex-shrink: 0; }
+  }
+}
+
+// ─── Buttons ────────────────────────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: $font-sans;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all $transition-base;
+  cursor: pointer;
+  text-decoration: none;
+
+  &--pill {
+    padding: 14px 28px;
+    border-radius: 50px;
+    background: transparent;
+    color: $color-text;
+    border: 1px solid rgba($color-text, 0.4);
+
+    &:hover {
+      border-color: $color-accent;
+      color: $color-accent;
+      background: rgba($color-accent, 0.06);
+    }
+  }
+
+  &--primary {
+    padding: 12px 24px;
+    border-radius: 6px;
+    background: $color-accent;
+    color: $color-bg;
+    border: 1px solid $color-accent;
+
+    &:hover {
+      background: $color-accent-dark;
+      border-color: $color-accent-dark;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(61, 214, 140, 0.25);
+    }
+  }
+
+  &--outline {
+    padding: 12px 24px;
+    border-radius: 6px;
+    background: transparent;
+    color: $color-text;
+    border: 1px solid $color-border;
+
+    &:hover {
+      border-color: $color-accent;
+      color: $color-accent;
+      background: $color-accent-muted;
+    }
+  }
+}
+
+// ─── About ──────────────────────────────────────────────────────────────────────
+.about {
+  padding: $section-padding;
+
+  &__inner {
+    @include container;
+    @include grid(1fr 1.2fr, 64px);
+    align-items: start;
+
+    @include respond-to(tablet) {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+  }
+
+  &__image-wrap {
+    position: relative;
+    border-radius: $radius-md;
+
+    img {
+      width: 100%;
+      border-radius: $radius-md;
+      object-fit: cover;
+      aspect-ratio: 1/1;
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  // Diagonal stripe decoration left of image
+  &__deco {
+    position: absolute;
+    left: -50px;
+    bottom: -20px;
+    width: 80px;
+    height: 80%;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba($color-accent, 0.5) 8px,
+      rgba($color-accent, 0.5) 9px
+    );
+    z-index: 0;
+
+    @include respond-to(tablet) { display: none; }
+  }
+
+  &__content {
+    padding-top: 24px;
+  }
+
+  &__label {
+    font-family: $font-mono;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: $color-accent;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  &__card {
+    background: rgba($color-accent, 0.05);
+    border: 1px solid rgba($color-accent, 0.3);
+    border-radius: $radius-md;
+    padding: 36px;
+
+    @include respond-to(mobile) {
+      padding: 24px 20px;
+    }
+  }
+
+  &__heading {
+    font-family: $font-mono;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    font-weight: 700;
+    color: $color-accent;
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+
+  &__text {
+    font-size: 0.92rem;
+    color: $color-text;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 0.9rem;
+      color: $color-text-muted;
+      line-height: 1.6;
+    }
+  }
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+}
+
+// ─── Skills ─────────────────────────────────────────────────────────────────────
+.skills {
+  padding: $section-padding;
+
+  &__inner {
+    @include container;
+  }
+
+  &__label {
+    font-family: $font-mono;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $color-accent;
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+    display: block;
+  }
+
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 64px;
+    align-items: start;
+
+    @include respond-to(tablet) {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  &__card {
+    background: rgba($color-accent, 0.04);
+    border: 1px solid rgba($color-accent, 0.4);
+    border-radius: $radius-md;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    @include respond-to(mobile) {
+      padding: 28px 20px;
+    }
+
+    h2 {
+      font-family: $font-mono;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      color: $color-accent;
+      line-height: 1.1;
+    }
+
+    p {
+      font-family: $font-mono;
+      font-size: 0.92rem;
+      color: $color-text;
+      line-height: 1.7;
+    }
+
+    &-cta {
+      strong {
+        display: block;
+        font-family: $font-mono;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: $color-text;
+        margin-bottom: 8px;
+      }
+
+      small {
+        display: block;
+        font-family: $font-mono;
+        font-size: 0.85rem;
+        color: $color-text-muted;
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  &__highlight {
+    color: $color-accent;
+  }
+
+  &__grid {
+    @include grid(repeat(4, 1fr), 32px 40px);
+
+    @include respond-to(tablet) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    @include respond-to(mobile) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px 16px;
+    }
+  }
+
+  &__tech {
+    background: transparent;
+    border: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    transition: transform $transition-base;
+    position: relative;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
+    img, svg {
+      width: 48px;
+      height: 48px;
+    }
+
+    span {
+      font-family: $font-mono;
+      font-size: 0.82rem;
+      color: $color-text;
+      line-height: 1.3;
+    }
+  }
+
+  &__tech--tooltip {
+    cursor: help;
+
+    &:hover .skills__tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -100%);
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translate(-50%, -90%);
+    background: $color-white;
+    border-radius: 16px;
+    padding: 20px 28px;
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity $transition-base, transform $transition-base, visibility $transition-base;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 12px solid $color-white;
+    }
+
+    p {
+      font-family: $font-sans;
+      font-size: 0.85rem;
+      color: $color-bg;
+      text-align: center;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+  }
+
+  &__tooltip-icons {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+
+      svg { width: 32px; height: 32px; }
+
+      small {
+        font-family: $font-mono;
+        font-size: 0.7rem;
+        color: $color-accent;
+      }
+    }
+  }
+}
+
+// ─── Projects ───────────────────────────────────────────────────────────────────
+.projects {
+  padding: $section-padding;
+
+  &__inner {
+    @include container;
+  }
+
+  &__label {
+    font-family: $font-mono;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $color-accent;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  &__heading {
+    font-family: $font-mono;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: $color-accent;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+
+  &__sub {
+    font-family: $font-mono;
+    font-size: 0.95rem;
+    color: $color-text;
+    margin-bottom: 48px;
+    max-width: 450px;
+    line-height: 1.6;
+  }
+
+  &__layout {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 80px;
+    align-items: start;
+    position: relative;
+
+    @include respond-to(tablet) {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+  }
+
+  &__list {
+    border-top: 1px solid $color-border;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 24px;
+    border-bottom: 1px solid $color-border;
+    cursor: pointer;
+    transition: background $transition-base, padding $transition-base;
+    gap: 16px;
+
+    &:hover {
+      background: rgba($color-accent, 0.12);
+
+      .projects__item-name { color: $color-text; }
+      .projects__item-arrow { opacity: 1; transform: translateX(0); }
+    }
+
+    @include respond-to(mobile) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 20px 16px;
+    }
+
+    &-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    &-name {
+      font-family: $font-mono;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      color: $color-text-muted;
+      transition: color $transition-base;
+      white-space: nowrap;
+    }
+
+    &-arrow {
+      font-size: 1.2rem;
+      color: $color-accent;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity $transition-base, transform $transition-base;
+      flex-shrink: 0;
+    }
+
+    &-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      span {
+        font-family: $font-mono;
+        font-size: 0.78rem;
+        color: $color-text-muted;
+        background: rgba($color-accent, 0.08);
+        border: 1px solid rgba($color-accent, 0.2);
+        border-radius: 20px;
+        padding: 4px 12px;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  // ─── Preview-Card (rechts neben der Liste) ──────────────
+  &__preview {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: clamp(240px, 28%, 340px);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.35s ease,
+      top 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.active {
+      opacity: 1;
+    }
+
+    @include respond-to(tablet) {
+      display: none; // Auf Tablet/Mobile gibt es kein Hover → keine Preview
+    }
+  }
+
+  &__preview-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: $radius-sm;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  // "Zweite Karte" hinter dem Bild — gleich groß wie das Bild,
+  // aber nach unten und rechts versetzt. Dadurch peekt sie nur
+  // an der rechten und unteren Seite hervor. Eckiges Ende rechts oben
+  // und links unten entsteht automatisch durch die Überdeckung.
+  &__preview-deco {
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    right: -28px;
+    bottom: -28px;
+    pointer-events: none;
+    z-index: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 6px,
+      rgba($color-accent, 0.6) 6px,
+      rgba($color-accent, 0.6) 8px
+    );
+  }
+}
+
+// ─── Testimonials ───────────────────────────────────────────────────────────────
+.testimonials {
+  padding: $section-padding;
+  position: relative;
+  overflow: hidden;
+
+  &__inner {
+    @include container;
+    position: relative;
+  }
+
+  &__heading {
+    font-family: $font-mono;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 700;
+    color: $color-accent;
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  &__carousel {
+    position: relative;
+    width: 100%;
+    overflow: visible;
+  }
+
+  &__track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    // Kein Breakpoint-Override: JS liest den Gap per getComputedStyle.
+    // Ein einheitlicher Wert verhindert Akkumulierungsfehler bei mehreren Slides.
+    gap: 24px;
+  }
+
+  &__slide {
+    flex: 0 0 min(700px, 80vw);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: scale(0.85);
+
+    @include respond-to(tablet) {
+      flex: 0 0 90vw;
+    }
+
+    &:not(.active) {
+      opacity: 0.3;
+    }
+
+    &.active {
+      transform: scale(1);
+    }
+
+    &.active .testimonials__card-quote {
+      opacity: 1;
+    }
+
+     @include respond-to(mobile) {
+      flex: 0 0 calc(100vw - 32px);
+    }
+  }
+
+  &__card {
+    @include respond-to(mobile) {
+      padding: 50px 24px 24px;
+    }
+
+    &-quote {
+      @include respond-to(mobile) {
+        font-size: 4rem;
+        top: -16px;
+        left: 20px;
+      }
+    }
+  }
+
+  &__card {
+    background: rgba($color-accent, 0.06);
+    border: 1px solid rgba($color-accent, 0.4);
+    border-radius: $radius-md;
+    padding: 60px 56px 32px;
+    height: 100%;
+    position: relative;
+
+    @include respond-to(tablet) { padding: 40px 24px 24px; }
+
+    &-quote {
+      position: absolute;
+      top: -32px;
+      left: -35px;
+      font-size:10rem;
+      color: $color-white;
+      font-family: 'Times New Roman', Georgia, serif;
+      line-height: 1;
+      font-weight: 900;
+      opacity: 0;
+      transition: opacity $transition-base;
+      z-index: 2;
+    }
+
+    &-text {
+      font-family: $font-mono;
+      font-size: 1rem;
+      color: $color-text;
+      line-height: 1.7;
+      margin-bottom: 48px;
+      min-height: 110px;
+    }
+
+    &-author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: $font-sans;
+      font-size: 0.9rem;
+      color: $color-text;
+      justify-content: flex-end;
+
+      &::before {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: $color-text;
+      }
+    }
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 40px;
+  }
+
+  &__btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: $color-text;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all $transition-base;
+    font-size: 1.4rem;
+    cursor: pointer;
+
+    &:hover {
+      color: $color-accent;
+      transform: scale(1.15);
+    }
+  }
+
+  &__dots {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    button {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: $color-text-muted;
+      border: none;
+      transition: $transition-base;
+      cursor: pointer;
+
+      &.active {
+        background: $color-accent;
+      }
+    }
+  }
+}
+
+// ─── Contact ────────────────────────────────────────────────────────────────────
+.contact {
+  padding: $section-padding;
+
+  &__inner {
+    @include container;
+    @include grid(1fr 1.1fr, 80px);
+    align-items: start;
+
+    @include respond-to(tablet) {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+  }
+
+  &__label {
+    font-family: $font-mono;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $color-accent;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  &__heading {
+    font-family: $font-mono;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: $color-accent;
+    line-height: 1.1;
+    margin-bottom: 40px;
+  }
+
+  &__sub {
+    font-family: $font-mono;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: $color-accent;
+    margin-bottom: 16px;
+  }
+
+  &__text {
+    font-family: $font-sans;
+    font-size: 0.95rem;
+    color: $color-text;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    max-width: 480px;
+  }
+
+  &__need {
+    font-family: $font-sans;
+    font-size: 0.95rem;
+    color: $color-text;
+    margin-top: 8px;
+
+    a {
+      color: $color-accent;
+      font-family: $font-mono;
+      text-decoration: none;
+      font-weight: 600;
+
+      &:hover { text-decoration: underline; }
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid rgba($color-accent, 0.3);
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba($color-accent, 0.3);
+    position: relative;
+
+    label {
+      font-family: $font-mono;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      font-weight: 700;
+      color: $color-accent;
+      letter-spacing: 0;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 0;
+      color: $color-text;
+      font-family: $font-sans;
+      font-size: 1rem;
+      transition: color $transition-base;
+
+      &:focus {
+        outline: none;
+      }
+
+      &::placeholder {
+        color: $color-text;
+        opacity: 1;
+      }
+
+      // Webkit Autofill - kein gelber Hintergrund
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus,
+      &:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px $color-bg inset !important;
+        -webkit-text-fill-color: $color-text !important;
+        caret-color: $color-text;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+
+      &.invalid {
+        color: #ff6b6b;
+      }
+    }
+
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+  }
+
+  // Fehlermeldung - keine Layoutverschiebung (min-height reserviert Platz)
+  &__error {
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    color: #ff6b6b;
+    min-height: 18px;
+    opacity: 0;
+    transition: opacity $transition-base;
+
+    &.visible {
+      opacity: 1;
+    }
+  }
+
+  &__privacy {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-family: $font-sans;
+    font-size: 0.9rem;
+    color: $color-text;
+    margin-top: 32px;
+    margin-bottom: 32px;
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      margin-top: 2px;
+      accent-color: $color-accent;
+      cursor: pointer;
+    }
+
+    &-link {
+      color: $color-accent;
+      font-family: $font-mono;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  &__submit {
+    align-self: center;
+    margin-top: 16px;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  // Erfolgs-/Fehlermeldung nach Versand
+  &__feedback {
+    margin-top: 24px;
+    padding: 16px 20px;
+    border-radius: $radius-md;
+    font-family: $font-mono;
+    font-size: 0.9rem;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &--success {
+      background: rgba($color-accent, 0.15);
+      border: 1px solid $color-accent;
+      color: $color-accent;
+    }
+
+    &--error {
+      background: rgba(255, 107, 107, 0.15);
+      border: 1px solid #ff6b6b;
+      color: #ff6b6b;
+    }
+  }
+}
+
+// ─── Footer ─────────────────────────────────────────────────────────────────────
+.footer {
+  border-top: 1px solid $color-border;
+  padding: 48px 0 32px;
+
+  &__inner {
+    @include container;
+    @include grid(auto 1fr auto, 32px);
+    align-items: start;
+
+    @include respond-to(tablet) {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+
+  &__logo {
+    font-family: $font-sans;
+    font-weight: 700;
+    color: $color-white;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+
+    small {
+      font-size: 0.75rem;
+      color: $color-text-muted;
+      font-weight: 400;
+    }
+  }
+
+  &__copy {
+    text-align: center;
+    font-size: 0.8rem;
+    color: $color-text-muted;
+
+    @include respond-to(tablet) { text-align: left; }
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+
+    @include respond-to(tablet) { align-items: flex-start; }
+
+    a {
+      font-size: 0.85rem;
+      color: $color-text-muted;
+      transition: color $transition-base;
+
+      &:hover { color: $color-accent; }
+    }
+  }
+}
+// ─── Project Modal ──────────────────────────────────────────────────────────────
+.project-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+  }
+
+  &__card {
+    position: relative;
+    background: linear-gradient(135deg, rgba($color-accent, 0.08), rgba($color-bg, 0.95));
+    border: 1px solid rgba($color-accent, 0.4);
+    border-radius: $radius-md;
+    padding: 56px;
+    max-width: 1200px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 2;
+
+    @include respond-to(tablet) {
+      padding: 32px 24px;
+    }
+
+    @include respond-to(mobile) {
+      padding: 48px 16px 24px;
+      max-height: 95vh;
+      border-radius: $radius-sm;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    color: $color-text;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: color $transition-base, transform $transition-base;
+
+    &:hover {
+      color: $color-accent;
+      transform: scale(1.1);
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+
+    @include respond-to(tablet) {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  &__number {
+    font-family: $font-mono;
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 700;
+    color: $color-accent;
+    line-height: 1;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  &__title {
+    font-family: $font-mono;
+    font-size: clamp(2rem, 9vw, 7rem);
+    font-weight: 700;
+    color: $color-text;
+    margin-bottom: 32px;
+  }
+
+    &__actions {
+    @include respond-to(mobile) {
+      flex-direction: column;
+      width: 100%;
+
+      .btn { width: 100%; justify-content: center; }
+    }
+  }
+
+
+
+  &__subtitle {
+    font-family: $font-mono;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $color-accent;
+    margin-bottom: 16px;
+  }
+
+  &__desc {
+    font-family: $font-sans;
+    font-size: 0.95rem;
+    color: $color-text;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 40px;
+
+    .tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: $font-mono;
+      font-size: 0.9rem;
+      color: $color-text;
+
+      svg { width: 22px; height: 22px; }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__right {
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: $radius-md;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  &__next {
+    position: absolute;
+    bottom: 32px;
+    right: 56px;
+    background: transparent;
+    border: none;
+    color: $color-accent;
+    font-family: $font-mono;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform $transition-base;
+
+    &:hover {
+      transform: translateX(4px);
+    }
+
+    @include respond-to(tablet) {
+      position: static;
+      margin-top: 24px;
+      align-self: flex-end;
+    }
+
+    @include respond-to(mobile) {
+      position: static;
+      margin-top: 16px;
+      right: auto;
+      bottom: auto;
+    }
+  }
+}
+
+// Body lock when modal is open
+body.modal-open {
+  overflow: hidden;
+}
+// ─── Animations ─────────────────────────────────────────────────────────────────
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}
+
+@keyframes bannerScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+// ─── Scroll reveal ──────────────────────────────────────────────────────────────
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
