@@ -12,7 +12,7 @@ Personal portfolio website built with **Vite + TypeScript + SCSS**.
 
 ## Project Structure
 
-\`\`\`
+```
 portfolio/
 ├── public/
 │   ├── impressum.html        # Legal notice (Impressum)
@@ -43,11 +43,11 @@ portfolio/
 ├── package.json
 ├── tsconfig.json
 └── vite.config.ts
-\`\`\`
+```
 
 ## Getting Started
 
-\`\`\`bash
+```bash
 # Install dependencies
 npm install
 
@@ -59,7 +59,7 @@ npm run build
 
 # Preview production build locally
 npm run preview
-\`\`\`
+```
 
 ## Customization
 
@@ -85,10 +85,10 @@ typography, spacing, breakpoints, etc.
 ### Contact Form Recipient
 Edit `public/send_mail.php`:
 
-\`\`\`php
+```php
 $TO_EMAIL = 'your-email@example.com';
 $SUBJECT  = 'Your custom subject';
-\`\`\`
+```
 
 The PHP script handles server-side validation (name, email, message, privacy
 consent) and prevents mail header injection. It returns JSON, which
@@ -101,13 +101,13 @@ After `npm run build`, the `dist/` folder contains the static site **plus**
 
 ### Recommended: classic PHP hosting
 Upload the contents of `dist/` via SFTP/FTP to a host that supports PHP
-(e.g. Strato, IONOS, Hetzner, All-Inkl, etc.). The contact form will work
+(e.g. Netcup, Strato, IONOS, Hetzner, All-Inkl). The contact form will work
 out of the box.
 
 ### Alternative: Vercel / Netlify (no PHP)
 Static deployment works for everything **except** the contact form –
 `send_mail.php` won't be executed. Either:
-- Disable / hide the contact form, or
+- Disable the contact form, or
 - Replace the PHP backend with a service like Formspree, EmailJS, or
   a serverless function (Vercel Functions, Netlify Functions).
 
