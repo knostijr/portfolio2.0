@@ -1,5 +1,5 @@
 /**
- * @file ContactForm – Contact form with onBlur validation and PHP backend.
+ * @file ContactForm – Contact form with onBlur validation and Formspree backend.
  *
  * Covers the requirements in the submission checklist (User Story 7):
  *  - Validation only on blur, not while typing
@@ -14,13 +14,16 @@ import { t, LANG_CHANGED_EVENT } from './language';
 /** Which validation rule applies to a given field */
 type FieldType = 'name' | 'email' | 'message';
 
+/** Formspree endpoint that receives the submission and forwards it via email. */
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mpqeonpb';
+
 /**
  * Contact form logic.
  *
  * Architecture:
  *  - `blur` event on each input → validate that single field, show error
  *  - `input`/`change` event → only recompute submit button state (no errors)
- *  - `submit` event → final validation, POST to PHP backend, show feedback
+ *  - `submit` event → final validation, POST to Formspree, show feedback
  *  - Custom `languagechanged` event → re-render visible error texts in the new language
  */
 export class ContactForm {
@@ -142,8 +145,8 @@ export class ContactForm {
    *
    * Intentionally a simple regex (not full RFC 5322). Stricter validation in
    * the browser is unnecessary because the `type="email"` attribute already
-   * catches the worst typos, and the final validation is done server-side in
-   * the PHP script via `filter_var($email, FILTER_VALIDATE_EMAIL)`.
+   * catches the worst typos, and Formspree performs its own server-side
+   * validation before forwarding the submission.
    *
    * @param email - The email address to check
    * @returns `true` if the address has the form `local@domain.tld`
@@ -180,7 +183,7 @@ export class ContactForm {
    * Handles the form submit:
    *  1. preventDefault (no page reload)
    *  2. re-validate all fields (defensive)
-   *  3. POST to `/send_mail.php` (server-side PHP script)
+   *  3. POST to Formspree (cloud form backend)
    *  4. show feedback (success or error)
    *  5. reset form on success
    *
@@ -203,10 +206,15 @@ export class ContactForm {
     try {
       const formData = new FormData(this.form);
 
-      // POST to the PHP script on the server (same origin → no CORS issues)
-      const response = await fetch('/send_mail.php', {
+      // POST to Formspree (handles email delivery for static hosting).
+      // The Accept header makes Formspree respond with JSON instead of
+      // an HTML redirect, which is required for fetch-based submissions.
+      const response = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
         body: formData,
+        headers: {
+          'Accept': 'application/json',
+        },
       });
 
       if (!response.ok) {
