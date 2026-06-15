@@ -43,7 +43,7 @@ const PROJECTS: ProjectData[] = [
     title: 'Join',
     description: 'Task manager inspired by the Kanban System. Create and organize tasks using drag and drop functions, assign users and categories.',
     tags: ['Angular', 'TypeScript', 'HTML', 'CSS', 'Firebase'],
-    image: '/join.png',
+    image: '/images/join.png',
     github: 'https://github.com/knostijr/join-team.git',
     live: '#'
   },
@@ -52,7 +52,7 @@ const PROJECTS: ProjectData[] = [
     title: 'Pokédex',
     description: 'A Pokédex web app that fetches data from the PokéAPI. Browse, search, and view detailed stats for every Pokémon.',
     tags: ['HTML', 'CSS', 'JavaScript'],
-    image: '/pokedex.png',
+    image: '/images/pokedex.png',
     github: 'https://github.com/knostijr/pokedex.git',
     live: '#'
   },
@@ -61,7 +61,7 @@ const PROJECTS: ProjectData[] = [
     title: 'Bestellapp',
     description: 'A pizza ordering app where users can browse the menu, add items to a cart, and complete an order with delivery details.',
     tags: ['HTML', 'CSS', 'JavaScript'],
-    image: '/bestellapp.png',
+    image: '/images/bestellapp.png',
     github: 'https://github.com/knostijr/orderapp.git',
     live: '#'
   }
