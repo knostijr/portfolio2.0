@@ -31,9 +31,9 @@ export class Navigation {
    * areas (scroll, mobile, smooth-scroll).
    */
   constructor() {
-    this.nav = document.querySelector('.nav') as HTMLElement;
-    this.toggle = document.querySelector('.nav__toggle');
-    this.mobileMenu = document.querySelector('.nav__mobile');
+    this.nav = document.querySelector(".nav") as HTMLElement;
+    this.toggle = document.querySelector(".nav__toggle");
+    this.mobileMenu = document.querySelector(".nav__mobile");
 
     this.initScroll();
     this.initMobile();
@@ -50,9 +50,9 @@ export class Navigation {
    */
   private initScroll(): void {
     const onScroll = () => {
-      this.nav.classList.toggle('scrolled', window.scrollY > 40);
+      this.nav.classList.toggle("scrolled", window.scrollY > 40);
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
   }
 
@@ -64,15 +64,15 @@ export class Navigation {
    * target section immediately instead of having it hidden by the overlay).
    */
   private initMobile(): void {
-    this.toggle?.addEventListener('click', () => {
+    this.toggle?.addEventListener("click", () => {
       this.isOpen = !this.isOpen;
-      this.mobileMenu?.classList.toggle('open', this.isOpen);
+      this.mobileMenu?.classList.toggle("open", this.isOpen);
     });
 
-    this.mobileMenu?.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
+    this.mobileMenu?.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
         this.isOpen = false;
-        this.mobileMenu?.classList.remove('open');
+        this.mobileMenu?.classList.remove("open");
       });
     });
   }
@@ -82,15 +82,23 @@ export class Navigation {
    *
    * preventDefault() avoids the jumpy native scroll
    * scrollIntoView({ behavior: 'smooth' }).
+   *
+   * Note: href is re-checked at click time, not only at attach time.
+   * The link's href can be changed dynamically (e.g. by projects.ts when
+   * filling the modal with a real live-demo URL). Without this check, the
+   * handler would try `document.querySelector('https://…')` and crash.
    */
   private initSmoothScroll(): void {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        const href = (anchor as HTMLAnchorElement).getAttribute('href');
-        if (!href) return;
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", (e) => {
+        const href = (anchor as HTMLAnchorElement).getAttribute("href");
+        if (!href || !href.startsWith("#") || href === "#") return;
+
         const target = document.querySelector(href);
-        target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!target) return;
+
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
   }

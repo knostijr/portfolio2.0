@@ -54,7 +54,7 @@ const PROJECTS: ProjectData[] = [
     tags: ['HTML', 'CSS', 'JavaScript'],
     image: '/images/pokedex.png',
     github: 'https://github.com/knostijr/pokedex.git',
-    live: '#'
+    live: 'https://pokedex.christoph-konst.de'
   },
   {
     number: '03',
