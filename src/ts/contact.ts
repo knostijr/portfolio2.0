@@ -17,14 +17,21 @@ type FieldType = 'name' | 'email' | 'message';
 /** Formspree endpoint that receives the submission and forwards it via email. */
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mpqeonpb';
 
+/** Minimum input lengths — single source of truth for validateField AND isFormValid. */
+const MIN_NAME_LENGTH = 2;
+const MIN_MESSAGE_LENGTH = 10;
+
+/** How long the success/error banner stays visible (ms). */
+const FEEDBACK_DURATION_MS = 5000;
+
 /**
  * Contact form logic.
  *
  * Architecture:
- *  - `blur` event on each input → validate that single field, show error
- *  - `input`/`change` event → only recompute submit button state (no errors)
- *  - `submit` event → final validation, POST to Formspree, show feedback
- *  - Custom `languagechanged` event → re-render visible error texts in the new language
+ *  - `blur` event on each input - validate that single field, show error
+ *  - `input`/`change` event - only recompute submit button state (no errors)
+ *  - `submit` event - final validation, POST to Formspree, show feedback
+ *  - Custom `languagechanged` event - re-render visible error texts in the new language
  */
 export class ContactForm {
   private form: HTMLFormElement | null;
@@ -103,15 +110,15 @@ export class ContactForm {
       errorKey = 'form.error.required';
     } else if (type === 'email' && !this.isValidEmail(value)) {
       errorKey = 'form.error.email';
-    } else if (type === 'name' && value.length < 2) {
+    } else if (type === 'name' && value.length < MIN_NAME_LENGTH) {
       errorKey = 'form.error.name';
-    } else if (type === 'message' && value.length < 10) {
+    } else if (type === 'message' && value.length < MIN_MESSAGE_LENGTH) {
       errorKey = 'form.error.message';
     }
 
     if (errorEl) {
       if (errorKey) {
-        // Cache key as data attribute → re-translatable on language change
+        // Cache key as data attribute - re-translatable on language change
         errorEl.dataset.errorKey = errorKey;
         errorEl.textContent = t(errorKey);
         errorEl.classList.add('visible');
@@ -163,9 +170,9 @@ export class ContactForm {
    * @returns `true` if name ≥ 2, email valid, message ≥ 10, privacy checked
    */
   private isFormValid(): boolean {
-    const nameOk = (this.nameInput?.value.trim().length ?? 0) >= 2;
+    const nameOk = (this.nameInput?.value.trim().length ?? 0) >= MIN_NAME_LENGTH;
     const emailOk = this.isValidEmail(this.emailInput?.value.trim() ?? '');
-    const messageOk = (this.messageInput?.value.trim().length ?? 0) >= 10;
+    const messageOk = (this.messageInput?.value.trim().length ?? 0) >= MIN_MESSAGE_LENGTH;
     const privacyOk = this.privacyInput?.checked ?? false;
     return nameOk && emailOk && messageOk && privacyOk;
   }
@@ -253,6 +260,6 @@ export class ContactForm {
 
     setTimeout(() => {
       this.feedback?.classList.remove('visible');
-    }, 5000);
+    }, FEEDBACK_DURATION_MS);
   }
 }

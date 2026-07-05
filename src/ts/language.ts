@@ -139,8 +139,8 @@ const translations: Record<Lang, Record<string, string>> = {
  * @example
  * ```ts
  * import { t } from './language';
- * console.log(t('hero.role'));        // → "Fullstack Developer"
- * console.log(t('does.not.exist'));   // → "does.not.exist"
+ * console.log(t('hero.role'));        // - "Fullstack Developer"
+ * console.log(t('does.not.exist'));   // - "does.not.exist"
  * ```
  *
  * @param key - Dot-separated translation key (e.g. `'form.error.email'`)
@@ -192,7 +192,7 @@ export class Language {
   /**
    * Attaches a click listener to each language button.
    *
-   * On click: switch language → persist → update DOM → fire custom event
+   * On click: switch language - persist - update DOM - fire custom event
    * so that other modules can react.
    */
   private init(): void {

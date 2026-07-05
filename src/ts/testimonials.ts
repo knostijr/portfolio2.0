@@ -84,10 +84,10 @@ export class Testimonials {
 
   /**
    * Registers all event listeners:
-   *  - Click on Prev/Next/Dot → manual navigation (resets autoplay)
-   *  - Hover over carousel → autoplay pauses
-   *  - Hover end → autoplay resumes
-   *  - Resize → re-center the active slide
+   *  - Click on Prev/Next/Dot - manual navigation (resets autoplay)
+   *  - Hover over carousel - autoplay pauses
+   *  - Hover end - autoplay resumes
+   *  - Resize - re-center the active slide
    */
   private init(): void {
     this.btnPrev?.addEventListener('click', () => this.handleManual(this.current - 1));

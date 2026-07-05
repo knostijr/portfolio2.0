@@ -7,7 +7,7 @@
  * once they scroll into the viewport.
  *
  * CSS hides `.reveal` with `opacity: 0` and a slight `translateY`; the
- * `.reveal.visible` rule resets both → fade-in + slide-up effect.
+ * `.reveal.visible` rule resets both - fade-in + slide-up effect.
  *
  * Performance: we use the native IntersectionObserver instead of
  * `scroll` events because it is browser-optimized (runs off-thread and only

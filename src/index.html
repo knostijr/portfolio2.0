@@ -3,9 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Christoph Konst - Fullstack Developer based in Hamburg, Germany." />
+  <meta name="description" content="Christoph Konst - Fullstack Developer based in Hamburg, Germany. Modern web applications with Angular, TypeScript and Python." />
   <title>Christoph Konst - Fullstack Developer</title>
+  <link rel="canonical" href="https://christoph-konst.de/" />
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Christoph Konst - Fullstack Developer" />
+  <meta property="og:description" content="Fullstack Developer based in Hamburg, Germany. Modern web applications with Angular, TypeScript and Python." />
+  <meta property="og:url" content="https://christoph-konst.de/" />
+  <meta property="og:image" content="https://christoph-konst.de/images/chris.webp" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="de_DE" />
+  <meta name="twitter:card" content="summary_large_image" />
+
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Christoph Konst",
+    "jobTitle": "Fullstack Developer",
+    "url": "https://christoph-konst.de/",
+    "email": "mailto:christophkonst@icloud.com",
+    "address": { "@type": "PostalAddress", "addressLocality": "Hamburg", "addressCountry": "DE" },
+    "sameAs": [
+      "https://github.com/knostijr",
+      "https://www.linkedin.com/in/christoph-konst"
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Karla:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -22,7 +51,7 @@
         <button class="nav__lang-btn" data-lang="de">DE</button>
       </div>
 
-      <nav class="nav__links" aria-label="Hauptnavigation">
+      <nav class="nav__links" aria-label="Main navigation">
         <a href="#about"    class="nav__link" data-i18n="nav.about">About me</a>
         <a href="#skills"   class="nav__link" data-i18n="nav.skills">Skills</a>
         <a href="#projects" class="nav__link" data-i18n="nav.projects">Projects</a>
@@ -36,12 +65,12 @@
         <span class="nav__logo-text">Chris<br/>Konst</span>
       </a>
 
-      <button class="nav__toggle" aria-label="Menü öffnen">
+      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-mobile">
         <span></span><span></span><span></span>
       </button>
     </div>
 
-    <nav class="nav__mobile">
+    <nav class="nav__mobile" id="nav-mobile" aria-label="Mobile navigation">
       <a href="#about"    data-i18n="nav.about">About me</a>
       <a href="#skills"   data-i18n="nav.skills">Skills</a>
       <a href="#projects" data-i18n="nav.projects">Projects</a>
@@ -54,7 +83,7 @@
     <!-- ─── Hero ───────────────────────────────────────────────── -->
     <section class="hero" id="hero" aria-label="Hero">
 
-      <a href="#about" class="hero__scroll" aria-label="Zum About-Bereich scrollen">
+      <a href="#about" class="hero__scroll" aria-label="Scroll to about section">
         <div class="hero__scroll-circle">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
@@ -72,7 +101,7 @@
         </div>
       </div>
 
-      <div class="hero__sidebar" aria-label="Kontakt & Social">
+      <div class="hero__sidebar" aria-label="Contact & social links">
         <a href="mailto:christophkonst@icloud.com" class="hero__email">christophkonst@icloud.com</a>
         <div class="hero__sidebar-icons">
           <a href="https://github.com/knostijr" target="_blank" rel="noopener" aria-label="GitHub">
@@ -107,7 +136,7 @@
 
         <div class="about__image-wrap reveal">
           <div class="about__deco" aria-hidden="true"></div>
-          <img src="/images/chris.png" alt="Christoph Konst" width="600" height="600" loading="lazy"/>
+          <img src="/images/chris.webp" alt="Christoph Konst" width="600" height="600" loading="lazy"/>
         </div>
 
         <div class="about__content reveal">
@@ -312,7 +341,7 @@
         <div class="projects__layout">
 
           <ul class="projects__list reveal">
-            <li class="projects__item" data-preview="/images/join.png" data-index="0">
+            <li class="projects__item" data-preview="/images/join.webp" data-index="0" tabindex="0" role="button">
               <div class="projects__item-left">
                 <span class="projects__item-name">Join</span>
                 <span class="projects__item-arrow">↗</span>
@@ -322,7 +351,7 @@
               </div>
             </li>
 
-            <li class="projects__item" data-preview="/images/pokedex.png" data-index="1">
+            <li class="projects__item" data-preview="/images/pokedex.webp" data-index="1" tabindex="0" role="button">
               <div class="projects__item-left">
                 <span class="projects__item-name">Pokédex</span>
                 <span class="projects__item-arrow">↗</span>
@@ -332,7 +361,7 @@
               </div>
             </li>
 
-            <li class="projects__item" data-preview="/images/bestellapp.png" data-index="2">
+            <li class="projects__item" data-preview="/images/bestellapp.webp" data-index="2" tabindex="0" role="button">
               <div class="projects__item-left">
                 <span class="projects__item-name">Bestellapp</span>
                 <span class="projects__item-arrow">↗</span>
@@ -345,7 +374,7 @@
 
           <div class="projects__preview" aria-hidden="true">
             <div class="projects__preview-deco"></div>
-            <img class="projects__preview-img" src="" alt="Projekt-Vorschau" />
+            <img class="projects__preview-img" src="" alt="" />
           </div>
 
         </div>
@@ -353,15 +382,15 @@
     </section>
 
     <!-- ─── Project Modal ─────────────────────────────────────── -->
-    <div class="project-modal" aria-hidden="true" role="dialog">
+    <div class="project-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
       <div class="project-modal__overlay"></div>
       <div class="project-modal__card">
-        <button class="project-modal__close" aria-label="Schließen"></button>
+        <button class="project-modal__close" aria-label="Close dialog"></button>
 
         <div class="project-modal__content">
           <div class="project-modal__left">
             <span class="project-modal__number">01</span>
-            <h3 class="project-modal__title">Join</h3>
+            <h3 class="project-modal__title" id="project-modal-title">Join</h3>
             <h4 class="project-modal__subtitle" data-i18n="modal.about">What is this project about?</h4>
             <p class="project-modal__desc">Task manager inspired by the Kanban System. Create and organize tasks using drag and drop functions, assign users and categories.</p>
 
@@ -374,12 +403,12 @@
           </div>
 
           <div class="project-modal__right">
-            <img class="project-modal__img" src="" alt="Projekt-Vorschau" />
+            <img class="project-modal__img" src="" alt="" />
           </div>
         </div>
 
         <button class="project-modal__next">
-          <span data-i18n="modal.next">Next project</span> →
+          <span data-i18n="modal.next">Next project</span>
         </button>
       </div>
     </div>
@@ -396,9 +425,9 @@
           </div>
         </div>
         <div class="testimonials__controls">
-          <button class="testimonials__btn testimonials__btn--prev">←</button>
-          <div class="testimonials__dots"><button class="active"></button><button></button><button></button></div>
-          <button class="testimonials__btn testimonials__btn--next">→</button>
+          <button class="testimonials__btn testimonials__btn--prev" aria-label="Previous testimonial">←</button>
+          <div class="testimonials__dots"><button class="active" aria-label="Testimonial 1"></button><button aria-label="Testimonial 2"></button><button aria-label="Testimonial 3"></button></div>
+          <button class="testimonials__btn testimonials__btn--next" aria-label="Next testimonial">→</button>
         </div>
       </div>
     </section>
@@ -453,7 +482,7 @@
         Christoph Konst
         <small data-i18n="footer.role">Web Developer · Hamburg Germany</small>
       </div>
-      <p class="footer__copy">© Christoph Konst 2025</p>
+      <p class="footer__copy">© Christoph Konst 2026</p>
       <nav class="footer__links">
         <a href="https://github.com/knostijr" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/christoph-konst" target="_blank" rel="noopener">LinkedIn</a>

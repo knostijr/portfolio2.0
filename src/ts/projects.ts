@@ -3,7 +3,7 @@
  *
  * Two interactions:
  *  1. **Hover preview** (desktop):
- *     Mouse over a list item → preview image flies in on the right and
+ *     Mouse over a list item - preview image flies in on the right and
  *     positions itself vertically at the height of the hovered item.
  *  2. **Click modal** (all devices):
  *     Click on an item opens a fullscreen modal with detail text, tags,
@@ -34,8 +34,6 @@ interface ProjectData {
  * Important: The order must match the HTML — the `data-index` attribute on
  * each `<li class="projects__item">` points to the array index here.
  *
- * TODO: Fill `github` and `live` with the real URLs of the deployed projects
- *       (currently '#' as placeholders).
  */
 const PROJECTS: ProjectData[] = [
   {
@@ -43,7 +41,7 @@ const PROJECTS: ProjectData[] = [
     title: 'Join',
     description: 'Task manager inspired by the Kanban System. Create and organize tasks using drag and drop functions, assign users and categories.',
     tags: ['Angular', 'TypeScript', 'HTML', 'CSS', 'Firebase'],
-    image: '/images/join.png',
+    image: '/images/join.webp',
     github: 'https://github.com/knostijr/join-team.git',
     live: 'https://join.christoph-konst.de'
   },
@@ -52,7 +50,7 @@ const PROJECTS: ProjectData[] = [
     title: 'Pokédex',
     description: 'A Pokédex web app that fetches data from the PokéAPI. Browse, search, and view detailed stats for every Pokémon.',
     tags: ['HTML', 'CSS', 'JavaScript'],
-    image: '/images/pokedex.png',
+    image: '/images/pokedex.webp',
     github: 'https://github.com/knostijr/pokedex.git',
     live: 'https://pokedex.christoph-konst.de'
   },
@@ -61,7 +59,7 @@ const PROJECTS: ProjectData[] = [
     title: 'Bestellapp',
     description: 'A pizza ordering app where users can browse the menu, add items to a cart, and complete an order with delivery details.',
     tags: ['HTML', 'CSS', 'JavaScript'],
-    image: '/images/bestellapp.png',
+    image: '/images/bestellapp.webp',
     github: 'https://github.com/knostijr/orderapp.git',
     live: '#'
   }
@@ -93,6 +91,9 @@ export class Projects {
   /** Index of the project currently shown in the modal (used by "Next project") */
   private currentIndex = 0;
 
+  /** Element that opened the modal — focus is returned to it on close */
+  private lastTrigger: HTMLElement | null = null;
+
   /**
    * Finds all DOM elements and initializes the event listeners.
    */
@@ -107,18 +108,23 @@ export class Projects {
 
   /**
    * Attaches all event listeners:
-   *  - `mouseenter` on items   → show hover preview
-   *  - `click` on items        → open modal
-   *  - `mouseleave` on layout  → hide hover preview
+   *  - `mouseenter` on items   - show hover preview
+   *  - `click` on items        - open modal
+   *  - `mouseleave` on layout  - hide hover preview
    *  - Modal controls (close button, overlay click, next button)
    *  - Global `keydown` for the Escape key
    */
   private init(): void {
     this.items.forEach(item => {
       item.addEventListener('mouseenter', () => this.showPreview(item));
-      item.addEventListener('click', () => {
-        const idx = parseInt(item.dataset.index || '0', 10);
-        this.openModal(idx);
+      item.addEventListener('click', () => this.openFromItem(item));
+      // Items are <li role="button" tabindex="0"> — activate via Enter/Space
+      // like a native button (WCAG 2.1.1 keyboard operability).
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.openFromItem(item);
+        }
       });
     });
 
@@ -135,7 +141,9 @@ export class Projects {
     nextBtn?.addEventListener('click', () => this.nextProject());
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') this.closeModal();
+      if (e.key === 'Escape' && this.modal?.classList.contains('open')) {
+        this.closeModal();
+      }
     });
   }
 
@@ -144,7 +152,7 @@ export class Projects {
    * so its center aligns with the center of the hovered item.
    *
    * Calculated with `getBoundingClientRect()` because the layout is dynamic
-   * (responsive font sizes → variable item heights).
+   * (responsive font sizes - variable item heights).
    *
    * @param item - The hovered `<li class="projects__item">` element
    */
@@ -166,7 +174,7 @@ export class Projects {
   /**
    * Opens the detail modal for a project.
    *
-   * Also adds `body.modal-open` → CSS prevents background scrolling while
+   * Also adds `body.modal-open` - CSS prevents background scrolling while
    * the modal is open.
    *
    * @param index - Index in the {@link PROJECTS} array
@@ -178,6 +186,19 @@ export class Projects {
     this.modal.classList.add('open');
     this.modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
+
+    // Move focus into the dialog so keyboard/screen-reader users land
+    // inside it instead of remaining on the (now covered) page content.
+    this.modal.querySelector<HTMLElement>('.project-modal__close')?.focus();
+  }
+
+  /**
+   * Opens the modal for a clicked/activated list item and remembers the
+   * item so focus can be restored when the modal closes.
+   */
+  private openFromItem(item: HTMLElement): void {
+    this.lastTrigger = item;
+    this.openModal(parseInt(item.dataset.index || '0', 10));
   }
 
   /**
@@ -188,6 +209,10 @@ export class Projects {
     this.modal.classList.remove('open');
     this.modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
+
+    // Return focus to the element that opened the dialog (WCAG 2.4.3).
+    this.lastTrigger?.focus();
+    this.lastTrigger = null;
   }
 
   /**
@@ -219,12 +244,24 @@ export class Projects {
     if (number) number.textContent = project.number;
     if (title) title.textContent = project.title;
     if (desc) desc.textContent = project.description;
-    if (img) img.src = project.image;
+    if (img) {
+      img.src = project.image;
+      img.alt = `Screenshot of the ${project.title} project`;
+    }
     if (github) github.href = project.github;
     if (live) live.href = project.live;
 
+    // Tags are built via the DOM API instead of innerHTML: data is inserted
+    // as text, never parsed as HTML — rules out injection by construction.
     if (tagsEl) {
-      tagsEl.innerHTML = project.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+      tagsEl.replaceChildren(
+        ...project.tags.map(tag => {
+          const span = document.createElement('span');
+          span.className = 'tag';
+          span.textContent = tag;
+          return span;
+        })
+      );
     }
   }
 }

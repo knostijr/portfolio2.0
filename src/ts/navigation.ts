@@ -46,7 +46,7 @@ export class Navigation {
    * CSS responds with background blur and a border.
    *
    * `passive: true` signals to the browser that we won't call preventDefault()
-   * → better scroll performance.
+   * - better scroll performance.
    */
   private initScroll(): void {
     const onScroll = () => {
@@ -59,22 +59,29 @@ export class Navigation {
   /**
    * Initializes the burger menu on mobile.
    *
-   * Click on toggle → menu opens/closes.
-   * Click on a menu link → menu closes automatically (so the user sees the
+   * Click on toggle - menu opens/closes.
+   * Click on a menu link - menu closes automatically (so the user sees the
    * target section immediately instead of having it hidden by the overlay).
    */
   private initMobile(): void {
     this.toggle?.addEventListener("click", () => {
-      this.isOpen = !this.isOpen;
-      this.mobileMenu?.classList.toggle("open", this.isOpen);
+      this.setMenuOpen(!this.isOpen);
     });
 
     this.mobileMenu?.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        this.isOpen = false;
-        this.mobileMenu?.classList.remove("open");
-      });
+      link.addEventListener("click", () => this.setMenuOpen(false));
     });
+  }
+
+  /**
+   * Single source of truth for the mobile menu state: updates the internal
+   * flag, the CSS class, and `aria-expanded` on the toggle (screen readers
+   * announce the current open/closed state).
+   */
+  private setMenuOpen(open: boolean): void {
+    this.isOpen = open;
+    this.mobileMenu?.classList.toggle("open", open);
+    this.toggle?.setAttribute("aria-expanded", String(open));
   }
 
   /**
@@ -98,7 +105,10 @@ export class Navigation {
         if (!target) return;
 
         e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Respect the OS-level reduced-motion setting: an explicit
+        // behavior:'smooth' would override CSS `scroll-behavior: auto`.
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
       });
     });
   }
