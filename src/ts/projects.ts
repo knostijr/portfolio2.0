@@ -45,7 +45,7 @@ const PROJECTS: ProjectData[] = [
     tags: ['Angular', 'TypeScript', 'HTML', 'CSS', 'Firebase'],
     image: '/images/join.png',
     github: 'https://github.com/knostijr/join-team.git',
-    live: '#'
+    live: 'https://join.christoph-konst.de'
   },
   {
     number: '02',
