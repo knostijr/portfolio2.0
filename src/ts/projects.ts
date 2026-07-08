@@ -61,7 +61,7 @@ const PROJECTS: ProjectData[] = [
     tags: ['HTML', 'CSS', 'JavaScript'],
     image: '/images/bestellapp.webp',
     github: 'https://github.com/knostijr/orderapp.git',
-    live: 'bestellapp.christoph-konst.de'
+    live: 'https://bestellapp.christoph-konst.de'
   }
 ];
 
