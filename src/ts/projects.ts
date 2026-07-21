@@ -25,7 +25,7 @@ interface ProjectData {
   tags: string[];
   image: string;
   github: string;
-  live: string;
+  live?: string;
 }
 
 /**
@@ -62,6 +62,24 @@ const PROJECTS: ProjectData[] = [
     image: '/images/bestellapp.webp',
     github: 'https://github.com/knostijr/orderapp.git',
     live: 'https://bestellapp.christoph-konst.de'
+  },
+  {
+    number: '04',
+    title: 'Videoflix',
+    description: 'Netflix-inspired video streaming backend. Uploaded videos are transcoded to HLS in three resolutions (480p/720p/1080p) via FFmpeg in background workers, with adaptive streaming, JWT auth in HttpOnly cookies and email activation — fully containerized with Docker Compose.',
+    tags: ['Django', 'DRF', 'PostgreSQL', 'Redis', 'FFmpeg', 'Docker'],
+    image: '/images/videoflix.webp',
+    github: 'https://github.com/knostijr/videoflix',
+    live: ''
+  },
+  {
+    number: '05',
+    title: 'Coderr',
+    description: 'REST API backend for a freelancer platform: business users publish service offers, customers place orders and leave reviews. Includes token authentication, role-based permissions, filtering and a full test suite across four Django apps.',
+    tags: ['Django', 'DRF', 'SQLite', 'Token Auth'],
+    image: '/images/coderr.webp',
+    github: 'https://github.com/knostijr/BE_coderr',
+    live: ''
   }
 ];
 
@@ -249,7 +267,16 @@ export class Projects {
       img.alt = `Screenshot of the ${project.title} project`;
     }
     if (github) github.href = project.github;
-    if (live) live.href = project.live;
+
+    if (live) {
+      if (project.live) {
+        live.href = project.live;
+        live.style.display = '';
+      } else {
+        live.removeAttribute('href');
+        live.style.display = 'none';
+      }
+    }
 
     // Tags are built via the DOM API instead of innerHTML: data is inserted
     // as text, never parsed as HTML — rules out injection by construction.
